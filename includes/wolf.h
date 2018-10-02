@@ -23,6 +23,7 @@ typedef struct  s_wolf
 {
     void        *mlx;
     void        *wind;
+    int         **cords;
     double      posx;
     double      posy;
     double      dirx;
@@ -39,5 +40,6 @@ typedef struct  s_wolf
 void    write_data(t_wolf *head, char *str);
 t_vector	*ft_add_new(t_vector *head);
 int  ft_esc(t_wolf *head);
+void ft_usage(void);
 
 #endif

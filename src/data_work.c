@@ -39,29 +39,39 @@ void    coord(t_wolf *head, int x, int y, int val)
     head->curr = ft_add_new(head->vector);
 }
 
-void    transform_data(t_wolf *head, char *str)
+int   **transform_data(t_wolf *head, char *str)
 {
     int i;
     int j;
     int k;
+    int w;
+    int **cor;
 
     i = 0;
-    j = -1;
-    k = 1;
+    j = 0;
+    k = 0;
+    cor = (int**)malloc(sizeof(int*) * (head->map_h + 1));
+    w = -1;
+    while (++w < head->map_w)
+        cor[w] = (int*)malloc(sizeof(int) * head->map_w);
     while (str[i])
     {
         if (str[i] == '\n')
         {
-            j = 0;
+            cor[k][j] = '\0';
+            j = -1;
             k++;
         }
         if ((str[i] < '0' || str[i] > '9') && str[i] != '\n')
             invalid();
         if (str[i] >= '0' && str[i] <= '9')
-            coord(head, j, k, (int)(str[i] - 48));
+        {
+            cor[k][j] = (int)(str[i] - 48);
+        }
         i++;
         j++;
     }
+    return (cor);
 }
 
 void    write_data(t_wolf *head, char *str)
@@ -70,13 +80,8 @@ void    write_data(t_wolf *head, char *str)
 	char	*tmp;
 	int		fd;
 
-	head->vector = ft_add_new(NULL);
-	head->curr = head->vector;
-    if (str)
-    {
-        if ((fd = open(str, O_RDONLY)) < 0)
-            ft_esc(head);
-    }
+    if ((fd = open(str, O_RDONLY)) < 0)
+        ft_usage();
 	buffer = NULL;
 	tmp = ft_strnew(1);
 	while (get_next_line(fd, &buffer) > 0)
@@ -86,11 +91,5 @@ void    write_data(t_wolf *head, char *str)
 		free(buffer);
 	}
     valid(head, tmp);
-    transform_data(head, tmp);
-    head->curr = head->vector;
-    while (head->curr->next)
-    {
-        printf("x = %d y = %d val = %d\n", head->curr->x, head->curr->y, head->curr->val);
-        head->curr = head->curr->next;
-    }
+    head->cords = transform_data(head, tmp);
 }

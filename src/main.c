@@ -4,7 +4,7 @@ int  ft_esc(t_wolf *head)
 {
     ft_putstr("Bye-bye\n");
     mlx_destroy_window(head->mlx, head->wind);
-    exit(1);
+    exit(0);
     return (0); 
 }
 
