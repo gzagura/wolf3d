@@ -91,5 +91,5 @@ void    write_data(t_wolf *head, char *str)
 		free(buffer);
 	}
     valid(head, tmp);
-    head->cords = transform_data(head, tmp);
+    head->map = transform_data(head, tmp);
 }
