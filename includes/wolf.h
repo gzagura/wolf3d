@@ -46,6 +46,12 @@ typedef struct  s_wolf
     double      raydiry;
     int      mapx;
     int      mapy;
+    int stepx;
+    int stepy;
+    int         x0;
+    int         x1;
+    int         y0;
+    int         y1;
     double      sidedistx;
     double      sidedisty;
     double      deltadistx;

@@ -92,4 +92,20 @@ void    write_data(t_wolf *head, char *str)
 	}
     valid(head, tmp);
     head->map = transform_data(head, tmp);
+
+//     int i;
+//     int j;
+
+//     i = 0;
+//     while (i < head->map_h)
+//     {
+//         j = 0;
+//         while ( j < head->map_w)
+//         {
+//             printf("%i", head->map[i][j]);
+//             j++;
+//         }
+//         printf("\n");
+//         i++;
+//     }
 }
