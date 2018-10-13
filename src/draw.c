@@ -14,7 +14,7 @@
 
 void	tata(t_wolf *head)
 {
-	ft_bzero(head->addr, 500 * 500 * 4);
+	ft_bzero(head->addr, WIDTH * HEIGHT * 4);
 	draw(head);
 	mlx_put_image_to_window(head->mlx, head->wind, head->img, 0, 0);
 }
@@ -144,7 +144,7 @@ void	draw(t_wolf *e)
       		e->rgb.r = 255;
       		e->rgb.g = 255;
       		e->rgb.b = 0;
-      		e->rgb.color =16776960;
+      		e->rgb.color = 16776960;
       	}
       	if (e->map[e->mapx][e->mapy] == 3)
       	{
@@ -159,7 +159,7 @@ void	draw(t_wolf *e)
       		e->rgb.g = e->rgb.g / 2;
       		e->rgb.b = e->rgb.b / 2;
       	}
-      	printf("1%d\n", drawStart);
+      	// printf("%d\n", drawStart);
      	verLine(e, x, drawStart, drawEnd);
       	x++;
     }

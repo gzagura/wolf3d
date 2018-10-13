@@ -11,7 +11,7 @@ OBJ			= $(SRC:%.c=%.o)
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
-	gcc $(CFLAGS) $(OBJ) -I ./includes -I /usr/local/include -I -r $(LIBFT) -L /usr/local/lib -lmlx -framework OpenGL -framework AppKit -o $(NAME) -lm
+	gcc $(CFLAGS) $(OBJ) -I ./includes -I /usr/local/include -I -r $(LIBFT) -L /usr/local/lib -lmlx -framework OpenGL -framework AppKit -o $(NAME) -lm 
 
 # macos gcc $(CFLAGS) $(OBJ) -I /usr/local/include -I -r $(LIBFT) -L /usr/local/lib -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 # linux gcc $(CFLAGS)  $(SCR) -I ././includes -I /usr/local/include -I -r ././libft/libft.a  -lmlx -lXext -lX11 -L ./minilibx/ -I ./minilibx/ -lm -o $(NAME)

@@ -1,5 +1,23 @@
 #include "wolf.h"
 
+#include <stdlib.h>
+
+char        *ft_strjoinfree(char const *s1, char const *s2)
+{
+    char    *string;
+
+    if (!s1 || !s2)
+        return (NULL);
+    string = (char *)malloc(sizeof(char) * (ft_strlen(s1) +
+                                            ft_strlen(s2) + 1));
+    if (!string)
+        return (NULL);
+    ft_strcpy(string, s1);
+    ft_strcpy(string + ft_strlen(s1), s2);
+    return (string);
+}
+
+
 void    invalid()
 {
     ft_putstr("invalid map\n");
@@ -86,8 +104,8 @@ void    write_data(t_wolf *head, char *str)
 	tmp = ft_strnew(1);
 	while (get_next_line(fd, &buffer) > 0)
 	{
-		tmp = ft_strjoin(tmp, buffer);
-		tmp = ft_strjoin(tmp, "\n");
+		tmp = ft_strjoinfree(tmp, buffer);
+		tmp = ft_strjoinfree(tmp, "\n");
 		free(buffer);
 	}
     valid(head, tmp);

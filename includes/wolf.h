@@ -9,8 +9,8 @@
 # include <fcntl.h>
 # include <math.h>
 
-#define WIDTH 500
-#define HEIGHT 500
+#define WIDTH 800
+#define HEIGHT 800
 
 typedef struct			s_vector
 {
@@ -63,7 +63,11 @@ typedef struct  s_wolf
     int         map_w;
     int         map_h;
     char                *addr;
+    unsigned int                  **text;
     int                 bits_per_pixel;
+    int                 bpp;
+    int                 sl;
+    int                 e;
     int                 size_line;
     int                 endian;
     void                *img;
