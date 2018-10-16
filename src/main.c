@@ -62,18 +62,33 @@ int   PlaySound()
     int status;
 
     status = 0;
-    system("afplay -t 10000 ./test1.mp3 &");
+    system("afplay  ./test1.mp3 &");
 
     return status;
 }
 
+void    init2(t_wolf *head)
+{
+    head->text[0].addr = mlx_get_data_addr(head->text[0].img, &head->text[0].bpp, &head->text[0].sl, &head->text[0].endl);
+    head->text[1].addr = mlx_get_data_addr(head->text[1].img, &head->text[1].bpp, &head->text[1].sl, &head->text[1].endl);
+    head->text[2].addr = mlx_get_data_addr(head->text[2].img, &head->text[2].bpp, &head->text[2].sl, &head->text[2].endl);
+    head->text[3].addr = mlx_get_data_addr(head->text[3].img, &head->text[3].bpp, &head->text[3].sl, &head->text[3].endl);
+    head->text[4].addr = mlx_get_data_addr(head->text[4].img, &head->text[4].bpp, &head->text[4].sl, &head->text[4].endl);
+    head->text[5].addr = mlx_get_data_addr(head->text[5].img, &head->text[5].bpp, &head->text[5].sl, &head->text[5].endl);
+}
 
 void  init_text(t_wolf *head)
 {
     int     lar;
     int     lon;
-
-    head->text[0] = (unsigned int*)mlx_get_data_addr(mlx_xpm_file_to_image(head->mlx, "redbrick.xpm", &lar, &lon), &(head->bpp), &(head->sl), &(head->e));
+   
+    head->text[0].img = mlx_xpm_file_to_image (head->mlx, "./img/redbrick.xpm", &lar, &lon);
+    head->text[1].img = mlx_xpm_file_to_image (head->mlx, "./img/bluestone.xpm", &lar, &lon);
+    head->text[2].img = mlx_xpm_file_to_image (head->mlx, "./img/eagle.xpm", &lar, &lon);
+    head->text[3].img = mlx_xpm_file_to_image (head->mlx, "./img/colorstone.xpm", &lar, &lon);
+    head->text[4].img = mlx_xpm_file_to_image (head->mlx, "./img/purplestone.xpm", &lar, &lon);
+    head->text[5].img = mlx_xpm_file_to_image (head->mlx, "./img/greystone.xpm", &lar, &lon);
+    init2(head);
 }
 
 
@@ -97,9 +112,10 @@ int main(int argc, char **argv)
         head->moveSpeed = 0.22;
         head->rotSpeed = 0.05;
         head->img = mlx_new_image(head->mlx, WIDTH, HEIGHT);
+        
         head->addr = mlx_get_data_addr(head->img,
             &(head->bits_per_pixel), &(head->size_line), &(head->endian));
-        // init_text(head);
+        init_text(head);
         tata(head);
         mlx_hook(head->wind, 17, 1L << 17, ft_esc, head);
         mlx_hook(head->wind, 2, 5, le_hook, head);

@@ -49,14 +49,6 @@ void    valid(t_wolf *head, char *str)
     }
 }
 
-void    coord(t_wolf *head, int x, int y, int val)
-{
-    head->curr->x = x;
-    head->curr->y = y;
-    head->curr->val = val;
-    head->curr = ft_add_new(head->vector);
-}
-
 int   **transform_data(t_wolf *head, char *str)
 {
     int i;

@@ -30,19 +30,80 @@ int		pixels(int x, int y)
 
 void	wrip(t_wolf *head, int count_pxl)
 {
-	head->addr[count_pxl] = head->rgb.r;
-	head->addr[count_pxl + 1] = head->rgb.g;
-	head->addr[count_pxl + 2] = head->rgb.b;
+	head->addr[count_pxl] = head->rgb.color & 0x0000ff;
+	head->addr[count_pxl + 1] = (head->rgb.color >> 8) & 0xff;
+	head->addr[count_pxl + 2] = (head->rgb.color >> 16);
 }
 
+void	floor_put(t_wolf *e, int textx, int texty, int y, int x)
+{
+	int count_pxl;
 
-void	verLine(t_wolf *head, int x, int st, int end)
+	texty++;
+	textx++;
+	count_pxl = pixels(x, y);
+	e->addr[count_pxl] = 0;
+	e->addr[count_pxl + 1] = 124;
+	e->addr[count_pxl + 2] = 124;
+}
+
+void	draw_floor(t_wolf *e, int end, int x)
+{
+	double	curr_dist;
+	int 	y;
+	double	curr_floor_x;
+	double	curr_floor_y;
+	int textx;
+	int	texty;
+
+	y = end + 1;
+	while (y < HEIGHT)
+	{
+		curr_dist = (double)HEIGHT / (2 * (double)y - (double)HEIGHT);
+		curr_floor_x = curr_dist / e->perpwalldist * x + (1 - (curr_dist / e->perpwalldist)) * e->posx;
+		curr_floor_y = curr_dist / e->perpwalldist * y + (1 - (curr_dist / e->perpwalldist)) * e->posy;
+		textx = (int)(curr_floor_x * TT) % TT;
+		texty = (int)(curr_floor_y * TT) % TT;
+		floor_put(e, textx, texty, y, x);
+		y++;
+	}
+}
+
+void	verLine(t_wolf *head, int x, int st, int end, int side, int i)
 {
 	int y;
 
 	y = st;
+	if (side == 0 && head->camx >= 0)
+	{
+		i = 0;
+	}
+	else if (side == 0 && head->camx < 0)
+	{
+		i = 1;
+	}
+	else if (side == 1 && head->camy >= 0)
+	{
+		i = 2;
+	}
+	else
+	{
+		i = 3;
+	}
 	while (y < end)
 	{
+
+		int d = y * 256 - HEIGHT * 128 + head->lineHeight * 128;  //256 and 128 factors to avoid floats
+        // TODO: avoid the division to speed this up
+        int texY = ((d * 64) / head->lineHeight) / 256;
+        int temp = head->texX * 4 + texY * head->text[i].sl;
+        head->rgb.color = head->text[i].addr[temp + 2] << 16;
+        head->rgb.color += head->text[i].addr[temp + 1] << 8;
+        head->rgb.color += head->text[i].addr[temp];
+        if(side == 1)
+        {
+        	head->rgb.color = (head->rgb.color >> 1) & 8355711;
+        } 
 		wrip(head, pixels(x, y));
 		y++;
 	}
@@ -54,7 +115,6 @@ void	draw(t_wolf *e)
 	int y = 0;
 	int hit = 0;
 	int side = 0;
-	int lineHeight;
 	int drawStart;
 	int drawEnd;
 
@@ -67,6 +127,9 @@ void	draw(t_wolf *e)
 		e->camerax = 2 * x / (double)(WIDTH) - 1;
 		e->raydirx = e->dirx + e->planex * e->camerax;
 		e->raydiry = e->diry + e->planey * e->camerax;
+
+		e->camx = e->dirx + e->planex * e->camerax;
+		e->camy = e->diry + e->planey * e->camerax;
 
 		e->mapx = (int)e->posx;
 		e->mapy = (int)e->posy;
@@ -118,49 +181,22 @@ void	draw(t_wolf *e)
 	    {
 	    	e->perpwalldist = (e->mapy - e->posy + (1 - e->stepy) / 2) / e->raydiry;
 	    }
-	    lineHeight = (int)(HEIGHT / e->perpwalldist);
-	    drawStart = (((lineHeight) * (-1)) / 2) + HEIGHT / 2;
+	    e->lineHeight = (int)(HEIGHT / e->perpwalldist);
+	    drawStart = (((e->lineHeight) * (-1)) / 2) + HEIGHT / 2;
 	    if (drawStart < 0)
 	    	drawStart = 0;
-	    drawEnd = lineHeight / 2 + HEIGHT / 2;
+	    drawEnd = e->lineHeight / 2 + HEIGHT / 2;
 	    if (drawEnd >= HEIGHT)
 	    	drawEnd = HEIGHT - 1;
-      	if (e->map[e->mapx][e->mapy] == 0)
-      	{
-      		e->rgb.r = 255;
-      		e->rgb.g = 0;
-      		e->rgb.b = 0;
-      		e->rgb.color = 16711680;
-      	}
-      	if (e->map[e->mapx][e->mapy] == 1)
-      	{
-      		e->rgb.r = 0;
-      		e->rgb.g = 255;
-      		e->rgb.b = 0;
-      		e->rgb.color = 65280;
-      	}
-      	if (e->map[e->mapx][e->mapy] == 2)
-      	{
-      		e->rgb.r = 255;
-      		e->rgb.g = 255;
-      		e->rgb.b = 0;
-      		e->rgb.color = 16776960;
-      	}
-      	if (e->map[e->mapx][e->mapy] == 3)
-      	{
-      		e->rgb.r = 0;
-      		e->rgb.g = 0;
-      		e->rgb.b = 255;
-      		e->rgb.color = 255;
-      	}
-      	if (side == 1)
-      	{
-      		e->rgb.r = e->rgb.r / 2;
-      		e->rgb.g = e->rgb.g / 2;
-      		e->rgb.b = e->rgb.b / 2;
-      	}
-      	// printf("%d\n", drawStart);
-     	verLine(e, x, drawStart, drawEnd);
+	    int		texnum = e->map[e->mapx][e->mapy] - 1;
+      	if (side == 0) e->wallX = e->posy + e->perpwalldist * e->raydiry;
+      	else           e->wallX = e->posx + e->perpwalldist * e->raydirx;
+      	e->wallX -= floor((e->wallX));
+	   	e->texX = (int)(e->wallX * (double)(64));
+      	if(side == 0 && e->raydirx > 0) e->texX = 64 - e->texX - 1;
+      	if(side == 1 && e->raydiry < 0) e->texX = 64 - e->texX - 1;
+     	verLine(e, x, drawStart, drawEnd, side, texnum);
+     	draw_floor(e, drawEnd, x);
       	x++;
     }
-	}
+}

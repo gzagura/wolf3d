@@ -1,7 +1,7 @@
 #ifndef WOLF_H
 # define WOLF_H
 
-# include "mlx.h"
+# include <mlx.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include "../libft/libft.h"
@@ -11,6 +11,16 @@
 
 #define WIDTH 800
 #define HEIGHT 800
+#define TT 128
+
+typedef struct  s_images
+{
+    void            *img;
+    char            *addr;
+    int             bpp;
+    int             sl;
+    int             endl;
+}               t_img;
 
 typedef struct			s_vector
 {
@@ -30,6 +40,12 @@ typedef struct          s_rgb
 
 typedef struct  s_wolf
 {
+    t_img               text[5];
+    double              wallX;
+    int                 texX;
+    int                 lineHeight;
+    double      camx;
+    double      camy;
     void        *mlx;
     void        *wind;
     int         **map;
@@ -63,7 +79,6 @@ typedef struct  s_wolf
     int         map_w;
     int         map_h;
     char                *addr;
-    unsigned int                  **text;
     int                 bits_per_pixel;
     int                 bpp;
     int                 sl;
