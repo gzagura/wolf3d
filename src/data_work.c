@@ -1,121 +1,121 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   data_work.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gzagura <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/18 12:17:30 by gzagura           #+#    #+#             */
+/*   Updated: 2018/10/18 12:17:32 by gzagura          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "wolf.h"
 
-#include <stdlib.h>
-
-char        *ft_strjoinfree(char const *s1, char const *s2)
+void	valid2(t_wolf *e)
 {
-    char    *string;
+	int		i;
+	int		j;
 
-    if (!s1 || !s2)
-        return (NULL);
-    string = (char *)malloc(sizeof(char) * (ft_strlen(s1) +
-                                            ft_strlen(s2) + 1));
-    if (!string)
-        return (NULL);
-    ft_strcpy(string, s1);
-    ft_strcpy(string + ft_strlen(s1), s2);
-    return (string);
+	i = 0;
+	if (e->map_h < 3 || e->map_w < 3)
+		invalid();
+	while (i < e->map_h)
+	{
+		j = 0;
+		if (e->map[i][0] < 1)
+			invalid();
+		if (e->map[i][e->map_w - 1] < 1)
+			invalid();
+		while (j < e->map_w)
+		{
+			if (e->map[0][j] < 1)
+				invalid();
+			if (e->map[e->map_h - 1][j] < 1)
+				invalid();
+			j++;
+		}
+		i++;
+	}
 }
 
-
-void    invalid()
+void	invalid(void)
 {
-    ft_putstr("invalid map\n");
-    exit(1);
+	ft_putstr("invalid map\n");
+	exit(1);
 }
 
-void    valid(t_wolf *head, char *str)
+void	valid(t_wolf *head, char *str)
 {
-    int i;
-    int j;
+	int		i;
+	int		j;
 
-    i = 0;
-    while (str[i] && str[i] != '\n')
-        i++;
-    head->map_w = i;
-    i = 0;
-    j = 0;
-    while (str[i])
-    {
-        if (str[i] == '\n')
-        {
-            if (j != head->map_w)
-                invalid();
-            j = -1;
-            head->map_h += 1;
-        }
-        j++;
-        i++;
-    }
+	i = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	head->map_w = i;
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] == '\n')
+		{
+			if (j != head->map_w)
+				invalid();
+			j = -1;
+			head->map_h += 1;
+		}
+		j++;
+		i++;
+	}
 }
 
-int   **transform_data(t_wolf *head, char *str)
+void	transform_data(t_wolf *head, char *str, int i)
 {
-    int i;
-    int j;
-    int k;
-    int w;
-    int **cor;
+	int		j;
+	int		w;
 
-    i = 0;
-    j = 0;
-    k = 0;
-    cor = (int**)malloc(sizeof(int*) * (head->map_h + 1));
-    w = -1;
-    while (++w < head->map_w)
-        cor[w] = (int*)malloc(sizeof(int) * head->map_w);
-    while (str[i])
-    {
-        if (str[i] == '\n')
-        {
-            cor[k][j] = '\0';
-            j = -1;
-            k++;
-        }
-        if ((str[i] < '0' || str[i] > '9') && str[i] != '\n')
-            invalid();
-        if (str[i] >= '0' && str[i] <= '9')
-        {
-            cor[k][j] = (int)(str[i] - 48);
-        }
-        i++;
-        j++;
-    }
-    return (cor);
+	j = 0;
+	head->map = (int**)malloc(sizeof(int*) * (head->map_h));
+	w = -1;
+	while (++w < head->map_h)
+		head->map[w] = (int*)malloc(sizeof(int) * head->map_w);
+	w = 0;
+	while (str[i])
+	{
+		if (str[i] == '\n')
+		{
+			j = -1;
+			w++;
+		}
+		if ((str[i] < '0' || str[i] > '9') && str[i] != '\n')
+			invalid();
+		if (str[i] >= '0' && str[i] <= '9')
+		{
+			head->map[w][j] = (int)(str[i] - 48);
+		}
+		i++;
+		j++;
+	}
 }
 
-void    write_data(t_wolf *head, char *str)
+void	write_data(t_wolf *head, char *str)
 {
-    char	*buffer;
+	char	*buffer;
 	char	*tmp;
 	int		fd;
 
-    if ((fd = open(str, O_RDONLY)) < 0)
-        ft_usage();
+	if ((fd = open(str, O_RDONLY)) < 0)
+		ft_usage();
 	buffer = NULL;
 	tmp = ft_strnew(1);
 	while (get_next_line(fd, &buffer) > 0)
 	{
-		tmp = ft_strjoinfree(tmp, buffer);
-		tmp = ft_strjoinfree(tmp, "\n");
-		free(buffer);
+		tmp = ft_strjoinfree(tmp, buffer, 3);
+		tmp = ft_strjoinfree(tmp, "\n", 1);
 	}
-    valid(head, tmp);
-    head->map = transform_data(head, tmp);
-
-//     int i;
-//     int j;
-
-//     i = 0;
-//     while (i < head->map_h)
-//     {
-//         j = 0;
-//         while ( j < head->map_w)
-//         {
-//             printf("%i", head->map[i][j]);
-//             j++;
-//         }
-//         printf("\n");
-//         i++;
-//     }
+	valid(head, tmp);
+	transform_data(head, tmp, 0);
+	free(tmp);
+	valid2(head);
 }
