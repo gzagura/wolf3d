@@ -92,9 +92,24 @@ typedef struct			s_wolf
 	t_rgb				rgb;
 }						t_wolf;
 
+void					valid2(t_wolf *e);
+void					invalid(void);
+void					valid(t_wolf *head, char *str);
+void					transform_data(t_wolf *head, char *str, int i);
 void					write_data(t_wolf *head, char *str);
+void					prep_dda(t_wolf *e);
+void					dda(t_wolf *e);
+void					math(t_wolf *e, int x);
+void					floor_put(t_wolf *e, int y, int x);
+void					floor_calc(t_wolf *e);
+void					ceiling(t_wolf *e, int y, int x);
 void					verline(t_wolf *e, int x);
+void					wrip(t_wolf *head, int count_pxl);
 void					draw_floor(t_wolf *e, int x);
+void					position(t_wolf *e);
+void					ft_usage(void);
+void					init2(t_wolf *e);
+void					init(t_wolf *e);
 int						le_hook(int key, t_wolf *e);
 int						pixels(int x, int y);
 void					invalid(void);

@@ -45,16 +45,20 @@ void	le_hook_help(t_wolf *e, int key)
 {
 	if (key == 126)
 	{
-		if (e->map[(int)(e->posx + e->dirx * e->move)][(int)(e->posy)] == 0)
+		if (e->map[(int)(e->posx + e->dirx *
+			(e->move + 0.2))][(int)(e->posy)] == 0)
 			e->posx += e->dirx * e->move;
-		if (e->map[(int)(e->posx)][(int)(e->posy + e->diry * e->move)] == 0)
+		if (e->map[(int)(e->posx)][(int)(e->posy
+			+ e->diry * (e->move + 0.2))] == 0)
 			e->posy += e->diry * e->move;
 	}
 	if (key == 125)
 	{
-		if (e->map[(int)(e->posx - e->dirx * e->move)][(int)(e->posy)] == 0)
+		if (e->map[(int)(e->posx - (e->dirx *
+			e->move + 0.2))][(int)(e->posy)] == 0)
 			e->posx -= e->dirx * e->move;
-		if (e->map[(int)(e->posx)][(int)(e->posy - e->diry * e->move)] == 0)
+		if (e->map[(int)(e->posx)][(int)(e->posy
+			- e->diry * (e->move + 0.2))] == 0)
 			e->posy -= e->diry * e->move;
 	}
 	tata(e);

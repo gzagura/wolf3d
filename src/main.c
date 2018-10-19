@@ -67,7 +67,7 @@ void	init(t_wolf *e)
 	e->diry = 0;
 	e->planex = 0;
 	e->planey = 0.66;
-	e->move = 0.32;
+	e->move = 0.35;
 	e->rot = 0.09;
 	e->t[0].img = mlx_xpm_file_to_image(e->mlx,
 		"./img/redbrick.xpm", &lar, &lon);

@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: gzagura <marvin@42.fr>                     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/10/18 15:30:02 by gzagura           #+#    #+#              #
+#    Updated: 2018/10/18 15:30:04 by gzagura          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 CFLAGS		= -Wall -Wextra -Werror
 NAME		= wolf3d
 SRC_NAME 	= main.c get_next_line.c data_work.c draw.c le_hook.c floor_ceiling.c help_draw.c
